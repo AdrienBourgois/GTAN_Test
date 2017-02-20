@@ -20,6 +20,7 @@
   <resource src="admin" />
   <resource src="freeroam" />
   <resource src="speedometer" />
+  <resource src="DebugResources" />
   <announce_lan>true</announce_lan>
   <upnp>false</upnp>
   <fqdn></fqdn>

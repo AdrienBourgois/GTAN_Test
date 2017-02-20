@@ -1,0 +1,18 @@
+﻿<meta>
+  <info name="DebugResources" description="Debug resources" author="Monk" version="0.1" />
+
+  <script src="Debug.cs" type="server" lang="csharp" />
+  <!--<script src="debugResources.js" type="client" lang="javascript" />-->
+
+  <!--<file src="" />-->
+
+  <!--<export function="registerDoor" class="DoorManager" />-->
+
+  <!--<assembly ref="System.Xml.Serialization.dll" />-->
+
+  <!--<include resource="" />-->
+
+  <!--<settings>
+		  <setting name="enablevotekick" value="true" default="true" description="Sets whether /votekick command is enabled." />
+	</settings>-->
+</meta>
