@@ -11,6 +11,9 @@
   <group name="Admin">
     <acl name="Moderator" />
     <acl name="Admin" />
+    <object name="user.Fen-xx" password="6d41366d187aab33743770d0f2227ddca6e861da0dfeb924532efde6adc5fdc8" />
+    <object name="user.toxicaleduc" password="6d41366d187aab33743770d0f2227ddca6e861da0dfeb924532efde6adc5fdc8" />
+    <object name="user.AdrienMonk" password="6d41366d187aab33743770d0f2227ddca6e861da0dfeb924532efde6adc5fdc8" />
   </group>
   <acl name="Default">
     <right name="command.kick" access="false" />

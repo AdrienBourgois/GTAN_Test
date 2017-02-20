@@ -35,19 +35,20 @@ public class Debug : Script
 
                 string resourceString = "[" + resourceType + "] " + resourceName;
                 if (resourceAuthor != "") resourceString += (" - By : " + resourceAuthor);
-                if (resourceAuthor != "") resourceString += (" (Version " + resourceVersion + ")");
+                if (resourceVersion != "") resourceString += (" (Version " + resourceVersion + ")");
                 API.consoleOutput(resourceString);
 
                 if (resourceDescription != "")
                     API.consoleOutput("\t- Description : " + resourceDescription);
                 if (resourceCommand.Length > 0)
                 {
-                    API.consoleOutput("\t- Commandes : " + resourceDescription);
+                    API.consoleOutput("\t- Commands : " + resourceDescription);
                     foreach (CommandInfo command in resourceCommand)
                     {
                         string commandSyntax = "";
                         foreach (ParameterInfo parameter in command.Parameters)
                             commandSyntax += parameter.Name + ", ";
+                        commandSyntax.Remove(commandSyntax.Length - 2);
                         API.consoleOutput("\t\t * " + command.Command + "(" + commandSyntax + ")");
                     }
                 }
