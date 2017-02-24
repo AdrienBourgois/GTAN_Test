@@ -1,27 +1,33 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Collections.Generic;
+using System.IO;
 using GTANetworkServer;
 
 public class RadioManager : Script
 {
-    private DateTime trackStartTime;
-    private TimeSpan currentMusicTimer;
-    private TimeSpan currentMusicLength;
     private bool running = true;
+    public Dictionary<string, Radio> Radios { get; private set; }
 
     public RadioManager()
     {
         API.onResourceStart += OnResourceStart;
         API.onResourceStop += OnResourceStop;
         API.onClientEventTrigger += OnClientEventTrigger;
+        Radios = new Dictionary<string, Radio>();
     }
 
     public void OnResourceStart()
     {
-        trackStartTime = DateTime.Now;
-        API.consoleOutput("[RadioManager] RadioManager timers start at : " + trackStartTime.TimeOfDay);
-        NextTrack("Axero.mp3");
-        API.startThread(UpdateTimers);
+        DirectoryInfo musicsFolder = new DirectoryInfo("resources\\Radio\\musics\\");
+        foreach (DirectoryInfo folder in musicsFolder.GetDirectories())
+        {
+            Radio currentRadio = new Radio(folder.Name);
+            Radios.Add(folder.Name, currentRadio);
+            API.consoleOutput("Radio " + currentRadio.Name + " : " + string.Join(",", currentRadio.TrackList));
+        }
+
+        API.consoleOutput("ON AIR Radio " + Radios["Electro"].Name + " -> " + Radios["Electro"].CurrentTrack.FileName);
+
+        API.startThread(Update);
     }
 
     public void OnResourceStop()
@@ -29,14 +35,30 @@ public class RadioManager : Script
         running = false;
     }
 
+    private void Update()
+    {
+        while (running)
+        {
+            foreach (Radio radio in Radios.Values)
+            {
+                radio.Update();
+                if (!radio.MustTriggerClients) continue;
+                API.triggerClientEventForAll("NextTrack", radio.Name, radio.CurrentTrack.FileName);
+                radio.ClientsTriggered();
+            }
+        }
+    }
+
     private void OnClientEventTrigger(Client player, string eventName, params object[] arguments)
     {
         switch (eventName)
         {
-            case "GetRadioTimer":
-                TimeSpan curentMusicTime = DateTime.Now.Subtract(trackStartTime);
-                API.consoleOutput("Start track at : " + curentMusicTime.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-                API.triggerClientEvent(player, "SetRadioTimer", curentMusicTime.TotalSeconds);
+            case "GetRadioList":
+                API.triggerClientEvent(player, "SetRadioList", string.Join(",", Radios.Keys));
+                break;
+            case "GetRadioInfos":
+                Track track = Radios[(string) arguments[0]].CurrentTrack;
+                API.triggerClientEvent(player, "SetRadioInfos", track.FileName, track.PlayTime.TotalSeconds);
                 break;
             default:
                 API.consoleOutput("Unknow Event !");
@@ -44,27 +66,9 @@ public class RadioManager : Script
         }
     }
 
-    private void NextTrack(string track)
+    [Command("radio", GreedyArg = true)]
+    public void LogCurrentTrack(Client player, string radio)
     {
-        currentMusicLength = GetMusicLength(track);
-    }
-
-    private TimeSpan GetMusicLength(string track)
-    {
-        TagLib.File f = TagLib.File.Create(API.getResourceFolder() + "/musics/" + track, TagLib.ReadStyle.Average);
-        TimeSpan length = f.Properties.Duration;
-        API.consoleOutput("Track " + track + " : " + length.Minutes + "." + length.Seconds + "." + length.Milliseconds);
-        return f.Properties.Duration;
-    }
-
-    private void UpdateTimers()
-    {
-        while (running)
-        {
-            /*TimeSpan delta = DateTime.Now.Subtract(trackStartTime);
-            currentMusicTimer = currentMusicTimer.Add(delta);
-            trackStartTime = DateTime.Now;*/
-            //API.consoleOutput("Left : " + currentMusicTimerLeft.Minutes + "." + currentMusicTimerLeft.Seconds + "." + currentMusicTimerLeft.Milliseconds);
-        }
+        API.consoleOutput("ON AIR Radio " + Radios[radio].Name + " -> " + Radios[radio].CurrentTrack.FileName + " - " + Radios[radio].CurrentTrack.PlayTime + "/" + Radios[radio].CurrentTrack.Length);
     }
 }

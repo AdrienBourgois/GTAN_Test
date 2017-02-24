@@ -6,7 +6,7 @@
   <minclientversion>0.0.0.0</minclientversion>
   <minclientversion_auto_update>true</minclientversion_auto_update>
   <announce>true</announce>
-  <password></password>
+  <password>cyadrom</password>
   <masterserver>http://master.gtanet.work/</masterserver>
   <acl_enabled>true</acl_enabled>
   <loglevel>0</loglevel>

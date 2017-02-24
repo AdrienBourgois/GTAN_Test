@@ -5,10 +5,12 @@
   <assembly ref="taglib-sharp.dll" />
 
   <script src="RadioManager.cs" type="server" lang="csharp" />
+  <script src="Radio.cs" type="server" lang="csharp" />
+  <script src="Track.cs" type="server" lang="csharp" />
 
   <script src="Radio.ts" type="client" lang="javascript" />
 
-  <file src="Axero.mp3" />
+  <!--<file src="Axero.mp3" />-->
 
   <!--<export function="registerDoor" class="DoorManager" />-->
 
