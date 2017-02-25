@@ -61,6 +61,7 @@
     <Content Include="meta.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="radio_list.html" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Radio.ts" />

@@ -8,9 +8,9 @@
   <script src="Radio.cs" type="server" lang="csharp" />
   <script src="Track.cs" type="server" lang="csharp" />
 
-  <script src="Radio.ts" type="client" lang="javascript" />
+  <script src="Radio.js" type="client" lang="javascript" />
 
-  <!--<file src="Axero.mp3" />-->
+  <file src="radio_list.html" />
 
   <!--<export function="registerDoor" class="DoorManager" />-->
 

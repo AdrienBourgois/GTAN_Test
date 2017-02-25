@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>RadioList</title>
+    </head>
+    <body>
+        <button onclick="ChooseRadio(this.id);" id="Axero">Axero</button>
+        <button onclick="ChooseRadio(this.id);" id="The Crew">The Crew</button>
+        <button onclick="StopRadio()" id="Stop">Stop</button>
+    </body>
+</html>
+
+<script>
+	function ChooseRadio(radio)
+	{
+		window.resourceCall("PlayRadio", radio);
+	};
+	function StopRadio()
+	{
+		window.resourceCall("StopRadio");
+	};
+</script>

@@ -23,9 +23,8 @@ public class RadioManager : Script
             Radio currentRadio = new Radio(folder.Name);
             Radios.Add(folder.Name, currentRadio);
             API.consoleOutput("Radio " + currentRadio.Name + " : " + string.Join(",", currentRadio.TrackList));
+            API.consoleOutput("ON AIR Radio " + Radios[folder.Name].Name + " -> " + Radios[folder.Name].CurrentTrack.FileName);
         }
-
-        API.consoleOutput("ON AIR Radio " + Radios["Electro"].Name + " -> " + Radios["Electro"].CurrentTrack.FileName);
 
         API.startThread(Update);
     }
