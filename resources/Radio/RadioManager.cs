@@ -21,6 +21,7 @@ public class RadioManager : Script
         foreach (DirectoryInfo folder in musicsFolder.GetDirectories())
         {
             Radio currentRadio = new Radio(folder.Name);
+            if (!currentRadio.IsValid) continue;
             Radios.Add(folder.Name, currentRadio);
             API.consoleOutput("Radio " + currentRadio.Name + " : " + string.Join(",", currentRadio.TrackList));
             API.consoleOutput("ON AIR Radio " + Radios[folder.Name].Name + " -> " + Radios[folder.Name].CurrentTrack.FileName);
@@ -56,8 +57,13 @@ public class RadioManager : Script
                 API.triggerClientEvent(player, "SetRadioList", string.Join(",", Radios.Keys));
                 break;
             case "GetRadioInfos":
-                Track track = Radios[(string) arguments[0]].CurrentTrack;
-                API.triggerClientEvent(player, "SetRadioInfos", track.FileName, track.PlayTime.TotalSeconds);
+                if (Radios.ContainsKey((string) arguments[0]))
+                {
+                    Track track = Radios[(string) arguments[0]].CurrentTrack;
+                    API.triggerClientEvent(player, "SetRadioInfos", track.FileName, track.PlayTime.TotalSeconds);
+                }
+                else
+                    API.triggerClientEvent(player, "ErrorRadioName");
                 break;
             default:
                 API.consoleOutput("Unknow Event !");
@@ -66,8 +72,16 @@ public class RadioManager : Script
     }
 
     [Command("radio", GreedyArg = true)]
-    public void LogCurrentTrack(Client player, string radio)
+    public void LogCurrentTrack(Client player, string radioName)
     {
-        API.consoleOutput("ON AIR Radio " + Radios[radio].Name + " -> " + Radios[radio].CurrentTrack.FileName + " - " + Radios[radio].CurrentTrack.PlayTime + "/" + Radios[radio].CurrentTrack.Length);
+        if (Radios.ContainsKey(radioName))
+        {
+            Radio radio = Radios[radioName];
+            API.sendChatMessageToPlayer(player, "ON AIR Radio " + radio.Name + " -> " + radio.CurrentTrack.FileName + " - " + radio.CurrentTrack.PlayTime + "/" + radio.CurrentTrack.Length);
+        }
+        else
+        {
+            API.sendChatMessageToPlayer(player, "Error in radio name !");
+        }
     }
 }

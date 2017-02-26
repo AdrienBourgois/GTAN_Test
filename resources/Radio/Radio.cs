@@ -8,20 +8,27 @@ public class Radio
     public Track CurrentTrack { get; private set; }
     public List<string> TrackList { get; private set; }
     public bool MustTriggerClients { get; private set; }
+    public bool IsValid { get; set; }
 
     public Radio(string name)
     {
+        IsValid = false;
+
         TrackList = new List<string>();
 
         Name = name;
 
         DirectoryInfo musicsFolder = new DirectoryInfo("resources\\Radio\\musics\\" + Name);
-        foreach (FileInfo file in musicsFolder.GetFiles())
-        {
+        FileInfo[] files = musicsFolder.GetFiles();
+        if (files.Length == 0)
+            return;
+
+        foreach (FileInfo file in files)
             TrackList.Add(file.Name);
-        }
 
         NextTrack();
+
+        IsValid = true;
     }
 
     private void NextTrack()
